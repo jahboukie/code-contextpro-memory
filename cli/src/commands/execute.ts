@@ -4,6 +4,7 @@ import ora from 'ora';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import axios from 'axios';
+import { SubscriptionManager } from '../services/subscriptionManager';
 
 interface ExecuteOptions {
   file?: string;
@@ -44,9 +45,20 @@ async function executeCode(options: ExecuteOptions): Promise<void> {
       return;
     }
 
+    // Check subscription limits
+    const subscriptionManager = new SubscriptionManager(process.cwd());
+    await subscriptionManager.initialize();
+
+    const canExecute = await subscriptionManager.canExecute();
+    if (!canExecute.allowed) {
+      console.log(chalk.red('❌ Execution not allowed:'), canExecute.reason);
+      console.log(chalk.yellow('💎 Upgrade to Pro: codecontextpro.com'));
+      return;
+    }
+
     // Get code to execute
     const { code, language } = await getCodeToExecute(options);
-    
+
     // Check if execution engine is running
     const engineUrl = `http://localhost:${options.port || 3001}`;
     const isEngineRunning = await checkExecutionEngine(engineUrl);
@@ -87,8 +99,17 @@ async function executeCode(options: ExecuteOptions): Promise<void> {
       const result = response.data;
       spinner.stop();
 
+      // Record execution usage
+      await subscriptionManager.recordExecution();
+
       // Display results
       displayExecutionResult(result, options);
+
+      // Show usage summary
+      const usage = subscriptionManager.getUsageStats();
+      if (usage) {
+        console.log(chalk.gray(`\n📊 Usage: ${usage.executionsThisMonth}/700 executions this month`));
+      }
 
     } catch (error: any) {
       spinner.fail('Execution failed');

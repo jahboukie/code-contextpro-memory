@@ -1,0 +1,18 @@
+{
+  "status": "trial",
+  "tier": "pro",
+  "userId": "trial-user",
+  "expiresAt": "2025-07-28T15:20:44.011Z",
+  "usage": {
+    "executionsThisMonth": 1,
+    "filesTracked": 0,
+    "lastResetDate": "2025-07-14T15:20:44.011Z",
+    "totalExecutions": 1
+  },
+  "limits": {
+    "maxExecutionsPerMonth": 700,
+    "maxFilesTracked": 1000,
+    "advancedPatternRecognition": true,
+    "unlimitedMemory": true
+  }
+}

@@ -2,6 +2,7 @@ import chalk from 'chalk';
 import * as fs from 'fs-extra';
 import * as path from 'path';
 import { MemoryEngine } from '../services/memoryEngine';
+import { SubscriptionManager } from '../services/subscriptionManager';
 
 export async function statusCommand() {
   console.log(chalk.cyan('\n🔍 CodeContext Pro Status\n'));
@@ -45,6 +46,38 @@ export async function statusCommand() {
       console.log(`   Files Tracked: ${chalk.cyan(stats.fileCount)}`);
       console.log(`   Last Activity: ${chalk.gray(stats.lastActivity ? new Date(stats.lastActivity).toLocaleString() : 'Never')}`);
       console.log(`   Database Size: ${chalk.gray(stats.databaseSize)}`);
+    }
+
+    // Subscription Status
+    console.log(chalk.bold('\n💎 Subscription:'));
+    try {
+      const subscriptionManager = new SubscriptionManager(currentDir);
+      await subscriptionManager.initialize();
+      const subscription = subscriptionManager.getSubscriptionStatus();
+
+      if (subscription) {
+        const statusColor = subscription.status === 'active' ? chalk.green :
+                           subscription.status === 'trial' ? chalk.yellow : chalk.red;
+        console.log(`   Status: ${statusColor(subscription.status.toUpperCase())}`);
+
+        if (subscription.status === 'trial') {
+          const daysRemaining = subscriptionManager.getTrialDaysRemaining();
+          console.log(`   Trial: ${chalk.yellow(`${daysRemaining} days remaining`)}`);
+        }
+
+        console.log(`   Tier: ${chalk.cyan(subscription.tier.toUpperCase())}`);
+        console.log(`   Executions: ${chalk.cyan(`${subscription.usage.executionsThisMonth}/${subscription.limits.maxExecutionsPerMonth}`)} this month`);
+        console.log(`   Files Tracked: ${chalk.cyan(`${subscription.usage.filesTracked}/${subscription.limits.maxFilesTracked}`)}`);
+        console.log(`   Total Executions: ${chalk.gray(subscription.usage.totalExecutions)}`);
+
+        if (subscription.status === 'trial' || subscription.status === 'expired') {
+          console.log(`   ${chalk.yellow('💎 Upgrade:')} codecontextpro.com`);
+        }
+      } else {
+        console.log(`   ${chalk.red('❌ No subscription found')}`);
+      }
+    } catch (error) {
+      console.log(`   ${chalk.red('❌ Failed to load subscription')}`);
     }
 
     // VS Code Extension Status

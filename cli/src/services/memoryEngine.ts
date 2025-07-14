@@ -3,6 +3,30 @@ import * as path from 'path';
 import * as fs from 'fs-extra';
 import { v4 as uuidv4 } from 'uuid';
 
+// Subscription and usage tracking interfaces
+export interface SubscriptionInfo {
+  status: 'trial' | 'active' | 'expired' | 'cancelled';
+  tier: 'pro';
+  userId: string;
+  expiresAt: string;
+  usage: UsageStats;
+  limits: UsageLimits;
+}
+
+export interface UsageStats {
+  executionsThisMonth: number;
+  filesTracked: number;
+  lastResetDate: string;
+  totalExecutions: number;
+}
+
+export interface UsageLimits {
+  maxExecutionsPerMonth: number;
+  maxFilesTracked: number;
+  advancedPatternRecognition: boolean;
+  unlimitedMemory: boolean;
+}
+
 // Core interfaces for memory system
 export interface ProjectMemory {
   id: string;
@@ -15,6 +39,7 @@ export interface ProjectMemory {
   patterns: CodePattern[];
   preferences: UserPreferences;
   fileHistory: FileChangeHistory[];
+  subscription?: SubscriptionInfo;
 }
 
 export interface Conversation {
