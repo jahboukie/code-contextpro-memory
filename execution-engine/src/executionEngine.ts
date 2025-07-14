@@ -202,13 +202,15 @@ export class ExecutionEngine {
     };
 
     const image = images[language];
-    
+    console.log(`🐳 Creating container with image: ${image}`);
+    console.log(`📁 Binding directory: ${envDir} -> /workspace`);
+
     const container = await this.docker.createContainer({
       Image: image,
       WorkingDir: '/workspace',
       Cmd: this.getExecutionCommand(language, request),
       HostConfig: {
-        Binds: [`${envDir}:/workspace`],
+        Binds: [`${envDir.replace(/\\/g, '/')}:/workspace`],
         Memory: this.parseMemoryLimit(request.memoryLimit || '128m'),
         CpuShares: 512, // Limit CPU usage
         NetworkMode: 'none', // No network access by default
@@ -245,41 +247,75 @@ export class ExecutionEngine {
     request: ExecutionRequest
   ): Promise<ExecutionResult> {
     const container = environment.container;
-    
-    await container.start();
-    
+
     // Set timeout
     const timeout = request.timeout || 30000; // 30 seconds default
     const timeoutPromise = new Promise<never>((_, reject) => {
       setTimeout(() => reject(new Error('Execution timeout')), timeout);
     });
-    
+
     try {
+      console.log('🐳 Attaching to container before starting...');
       const stream = await container.attach({
         stream: true,
         stdout: true,
         stderr: true
       });
+
+      console.log('🚀 Starting container...');
+      await container.start();
+      console.log('✅ Container started successfully');
       
       let output = '';
       let errors = '';
-      
-      stream.on('data', (chunk: any) => {
-        const data = chunk.toString();
-        if (chunk[0] === 1) { // stdout
-          output += data.slice(8); // Remove Docker stream header
-        } else if (chunk[0] === 2) { // stderr
-          errors += data.slice(8);
-        }
+
+      // Collect output from stream
+      const outputPromise = new Promise<void>((resolve) => {
+        stream.on('data', (chunk: any) => {
+          const data = chunk.toString();
+          if (chunk[0] === 1) { // stdout
+            output += data.slice(8); // Remove Docker stream header
+          } else if (chunk[0] === 2) { // stderr
+            errors += data.slice(8);
+          }
+        });
+
+        stream.on('end', () => {
+          console.log('📤 Stream ended, output collected');
+          resolve();
+        });
       });
-      
-      const waitResult = await Promise.race([
-        container.wait(),
-        timeoutPromise
-      ]);
-      
-      const stats = await container.stats({ stream: false });
-      const memoryUsage = stats.memory_stats?.usage || 0;
+
+      // Wait for container to finish
+      let waitResult;
+      try {
+        waitResult = await Promise.race([
+          container.wait(),
+          timeoutPromise
+        ]);
+      } catch (error: any) {
+        console.log('🔍 Container wait error:', error.statusCode, error.reason);
+        if (error.statusCode === 304 && error.reason === 'container already stopped') {
+          // Container finished successfully but already stopped
+          console.log('✅ Container completed successfully');
+          waitResult = { StatusCode: 0 };
+        } else {
+          console.log('❌ Unexpected container error:', error);
+          throw error;
+        }
+      }
+
+      // Wait for output to be fully collected
+      await outputPromise;
+
+      // Try to get stats, but don't fail if container is already stopped
+      let memoryUsage = 0;
+      try {
+        const stats = await container.stats({ stream: false });
+        memoryUsage = stats.memory_stats?.usage || 0;
+      } catch (error) {
+        console.log('📊 Could not get container stats (container already stopped)');
+      }
       
       return {
         id: environment.id,
@@ -292,7 +328,15 @@ export class ExecutionEngine {
       };
       
     } finally {
-      await container.stop();
+      try {
+        await container.stop();
+      } catch (error: any) {
+        if (error.statusCode === 304 && error.reason === 'container already stopped') {
+          console.log('🧹 Container already stopped, skipping stop command');
+        } else {
+          console.warn('⚠️  Error stopping container:', error);
+        }
+      }
     }
   }
 

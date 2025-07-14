@@ -1,0 +1,1 @@
+const payment = { amount: 99, currency: 'USD', provider: 'lemon-squeezy' }; console.log('💰 Processing payment:', payment); console.log('🏥 Healthcare compliance: HIPAA ready');
