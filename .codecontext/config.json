@@ -1,0 +1,12 @@
+{
+  "version": "0.1.0",
+  "mode": "memory-only",
+  "projectId": "295068dad641ecad",
+  "projectName": "code-context-pro",
+  "createdAt": "2025-07-14T13:14:55.022Z",
+  "features": {
+    "memory": true,
+    "execution": false,
+    "intelligence": false
+  }
+}
