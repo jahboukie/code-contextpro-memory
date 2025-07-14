@@ -1,7 +1,7 @@
 {
-  "name": "codecontext-pro-cli",
-  "version": "0.1.0",
-  "description": "AI Coding Assistant Amplifier CLI - Phase 1: Memory Engine",
+  "name": "codecontext-pro",
+  "version": "1.0.0",
+  "description": "Stop paying for AI amnesia. Give your AI assistant persistent memory and code execution superpowers.",
   "main": "dist/index.js",
   "bin": {
     "codecontext-pro": "./dist/index.js"
@@ -14,14 +14,28 @@
   },
   "keywords": [
     "ai",
-    "coding",
-    "assistant",
+    "artificial-intelligence",
+    "coding-assistant",
     "memory",
     "context",
-    "vscode"
+    "execution",
+    "docker",
+    "cli",
+    "developer-tools",
+    "productivity",
+    "goldfish-mode",
+    "persistent-memory"
   ],
-  "author": "CodeContext Pro Team",
+  "author": "CodeContext Pro Team <hello@codecontextpro.com>",
   "license": "MIT",
+  "homepage": "https://codecontextpro.com",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jahboukie/code-contextpro-memory.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jahboukie/code-contextpro-memory/issues"
+  },
   "dependencies": {
     "axios": "^1.10.0",
     "chalk": "^4.1.2",
