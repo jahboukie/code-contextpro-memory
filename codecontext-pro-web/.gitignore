@@ -44,3 +44,6 @@ next-env.d.ts
 .codecontext/memory.db
 .codecontext/logs/
 .codecontext/sandbox/
+
+# Secret sauce - no documentation in commits
+*.md
