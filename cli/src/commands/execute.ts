@@ -5,6 +5,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import axios from 'axios';
 import { SubscriptionManager } from '../services/subscriptionManager';
+import { apiClient } from '../services/apiClient';
 
 interface ExecuteOptions {
   file?: string;
@@ -45,7 +46,32 @@ async function executeCode(options: ExecuteOptions): Promise<void> {
       return;
     }
 
-    // Check subscription limits
+    // CRITICAL: Validate execution with secure server (UNGAMEABLE)
+    console.log(chalk.blue('🔐 Validating execution permissions...'));
+
+    try {
+      const validationResult = await apiClient.validateExecution();
+      console.log(chalk.green(`✅ ${validationResult.message}`));
+
+      if (validationResult.usage) {
+        console.log(chalk.gray(`   Executions: ${validationResult.usage.used}/${validationResult.usage.limit}`));
+      }
+    } catch (error: any) {
+      console.error(chalk.red('❌ Execution validation failed:'));
+      console.error(chalk.red(`   ${error.message}`));
+
+      if (error.message.includes('Not authenticated')) {
+        console.log(chalk.yellow('\n💡 Run "codecontext login" to authenticate.'));
+      } else if (error.message.includes('Subscription required')) {
+        console.log(chalk.yellow('\n💡 Please activate your subscription at https://codecontextpro.com'));
+      } else if (error.message.includes('Usage limit exceeded')) {
+        console.log(chalk.yellow('\n💡 Upgrade your plan or wait for monthly reset.'));
+      }
+
+      return;
+    }
+
+    // Legacy subscription check (keeping for backward compatibility)
     const subscriptionManager = new SubscriptionManager(process.cwd());
     await subscriptionManager.initialize();
 

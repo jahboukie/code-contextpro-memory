@@ -6,6 +6,8 @@ import { initCommand } from './commands/init';
 import { statusCommand } from './commands/status';
 import { memoryCommand } from './commands/memory';
 import { createExecuteCommand } from './commands/execute';
+import { upgradeCommand } from './commands/upgrade';
+import { loginCommand, logoutCommand } from './commands/login';
 
 const program = new Command();
 
@@ -25,7 +27,18 @@ ${chalk.cyan('╚═════════════════════
 
 program.addHelpText('beforeAll', banner);
 
-// Commands
+// Authentication Commands
+program
+  .command('login')
+  .description('🔐 Login with your API key')
+  .action(loginCommand);
+
+program
+  .command('logout')
+  .description('🚪 Logout and remove credentials')
+  .action(logoutCommand);
+
+// Project Commands
 program
   .command('init')
   .description('Initialize CodeContext Pro in current project')
@@ -48,6 +61,11 @@ program
   .action(memoryCommand);
 
 program.addCommand(createExecuteCommand());
+
+program
+  .command('upgrade')
+  .description('Upgrade to Lifetime Pro - unlimited executions and memory')
+  .action(upgradeCommand);
 
 // Global error handling
 process.on('unhandledRejection', (reason, promise) => {

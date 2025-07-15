@@ -1,8 +1,8 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-import express from 'express';
-import cors from 'cors';
-import crypto from 'crypto';
+import * as express from 'express';
+import * as cors from 'cors';
+import * as crypto from 'crypto';
 
 // Initialize Firebase Admin
 admin.initializeApp();

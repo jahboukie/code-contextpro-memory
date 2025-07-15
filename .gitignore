@@ -37,3 +37,4 @@ cli/test-project/
 # Temporary files
 *.tmp
 *.temp
+*.md

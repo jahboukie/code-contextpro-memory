@@ -6,9 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 // Subscription and usage tracking interfaces
 export interface SubscriptionInfo {
   status: 'trial' | 'active' | 'expired' | 'cancelled';
-  tier: 'pro';
+  tier: 'free' | 'pro' | 'lifetime' | 'developer';
   userId: string;
-  expiresAt: string;
+  expiresAt: string | null;
   usage: UsageStats;
   limits: UsageLimits;
 }

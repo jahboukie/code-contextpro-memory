@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "mode": "memory-execution",
+  "projectId": "2ae29807e0ad5b71",
+  "projectName": "dev-test",
+  "createdAt": "2025-07-14T21:08:01.251Z",
+  "features": {
+    "memory": true,
+    "execution": true,
+    "intelligence": false
+  },
+  "executionEngine": {
+    "port": 3001,
+    "sandboxDir": "C:\\Users\\scorp\\projects\\vibe-extension\\code-context-pro\\dev-test\\.codecontext\\sandbox",
+    "supportedLanguages": [
+      "javascript",
+      "typescript",
+      "python",
+      "go",
+      "rust"
+    ]
+  }
+}
