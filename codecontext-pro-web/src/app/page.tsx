@@ -131,7 +131,7 @@ export default function HomePage() {
 
                   <div className="text-center">
                     <div className="text-blue-400 text-sm font-semibold mb-1">🧠 COGNITIVE UPGRADES</div>
-                    <div className="text-purple-300 text-lg">Sign in to choose your tier: <span className="text-white font-bold">$19.99</span> or <span className="text-white font-bold">$99/month</span></div>
+                    <div className="text-purple-300 text-lg">Sign in to choose your tier: <span className="text-white font-bold">$29.99</span>, <span className="text-white font-bold">$199</span>, or <span className="text-white font-bold">$499/month</span></div>
                   </div>
                 </>
               ) : (
@@ -260,7 +260,7 @@ export default function HomePage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Starter Tier */}
             <div className="bg-gradient-to-br from-blue-900/50 to-purple-900/50 backdrop-blur-sm border border-blue-500/30 rounded-3xl p-8 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-600/10 to-purple-600/10 rounded-3xl"></div>
@@ -272,7 +272,7 @@ export default function HomePage() {
 
                 <h3 className="text-3xl font-bold text-white mb-4">Starter</h3>
                 <div className="text-5xl font-bold text-white mb-2">
-                  $19.99
+                  $29.99
                   <span className="text-xl text-purple-300 font-normal">/month</span>
                 </div>
                 <div className="text-purple-300 mb-8">
@@ -282,11 +282,11 @@ export default function HomePage() {
                 <div className="space-y-4 mb-8 text-left">
                   <div className="flex items-center">
                     <span className="text-green-400 mr-3">✅</span>
-                    <span className="text-white">25 autonomous executions/month</span>
+                    <span className="text-white">50 autonomous executions/month</span>
                   </div>
                   <div className="flex items-center">
                     <span className="text-green-400 mr-3">✅</span>
-                    <span className="text-white">25 tracked files with memory</span>
+                    <span className="text-white">50 tracked files with memory</span>
                   </div>
                   <div className="flex items-center">
                     <span className="text-green-400 mr-3">✅</span>
@@ -332,22 +332,27 @@ export default function HomePage() {
               </div>
             </div>
 
-            {/* Pro Tier */}
+            {/* Professional Tier */}
             <div className="bg-gradient-to-br from-purple-900/50 to-pink-900/50 backdrop-blur-sm border border-purple-500/30 rounded-3xl p-8 text-center relative overflow-hidden">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                  🚀 MOST POPULAR
+                </span>
+              </div>
               <div className="absolute inset-0 bg-gradient-to-r from-purple-600/10 to-pink-600/10 rounded-3xl"></div>
 
               <div className="relative z-10">
-                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold text-sm mb-6">
-                  🚀 PRO COGNITIVE UPGRADE
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400 text-white font-bold text-sm mb-6 mt-4">
+                  🚀 PROFESSIONAL COGNITIVE UPGRADE
                 </div>
 
-                <h3 className="text-3xl font-bold text-white mb-4">Pro</h3>
+                <h3 className="text-3xl font-bold text-white mb-4">Professional</h3>
                 <div className="text-5xl font-bold text-white mb-2">
-                  $99
+                  $199
                   <span className="text-xl text-purple-300 font-normal">/month</span>
                 </div>
                 <div className="text-purple-300 mb-8">
-                  For professional development teams
+                  For power users & consultants
                 </div>
 
                 <div className="space-y-4 mb-8 text-left">
@@ -387,7 +392,7 @@ export default function HomePage() {
                     {loading ? (
                       <>🔄 Signing In...</>
                     ) : (
-                      <>🚀 Upgrade to Pro</>
+                      <>🚀 Get Professional</>
                     )}
                   </button>
                 ) : (
@@ -397,9 +402,69 @@ export default function HomePage() {
                     disabled={loading}
                     className="w-full bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white font-bold py-4 px-8 rounded-2xl text-lg transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-purple-500/25 disabled:opacity-50"
                   >
-                    🚀 Upgrade to Pro
+                    🚀 Get Professional
                   </button>
                 )}
+              </div>
+            </div>
+
+            {/* Team Tier */}
+            <div className="bg-gradient-to-br from-yellow-900/50 to-orange-900/50 backdrop-blur-sm border border-yellow-500/30 rounded-3xl p-8 text-center relative overflow-hidden">
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 py-2 rounded-full text-sm font-bold">
+                  👑 ENTERPRISE
+                </span>
+              </div>
+              <div className="absolute inset-0 bg-gradient-to-r from-yellow-600/10 to-orange-600/10 rounded-3xl"></div>
+
+              <div className="relative z-10">
+                <div className="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-yellow-400 to-orange-400 text-white font-bold text-sm mb-6 mt-4">
+                  👑 TEAM COGNITIVE UPGRADE
+                </div>
+
+                <h3 className="text-3xl font-bold text-white mb-4">Team</h3>
+                <div className="text-5xl font-bold text-white mb-2">
+                  $499
+                  <span className="text-xl text-yellow-300 font-normal">/user/month</span>
+                </div>
+                <div className="text-yellow-300 mb-8">
+                  For development teams
+                </div>
+
+                <div className="space-y-4 mb-8 text-left">
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">1,500 autonomous executions/month</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">2,000 tracked files with memory</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">Shared team memory (coming soon)</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">Team management dashboard</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">Priority support & onboarding</span>
+                  </div>
+                  <div className="flex items-center">
+                    <span className="text-green-400 mr-3">✅</span>
+                    <span className="text-white">Everything in Professional +</span>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  disabled={true}
+                  className="w-full bg-gray-600 text-gray-300 font-bold py-4 px-8 rounded-2xl text-lg cursor-not-allowed"
+                >
+                  👑 Coming Soon
+                </button>
               </div>
             </div>
           </div>
