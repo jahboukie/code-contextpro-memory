@@ -1,6 +1,6 @@
 {
   "name": "codecontext-pro-monorepo",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "CodeContext Pro - Stop paying for AI amnesia. Complete AI assistant memory and execution system.",
   "private": true,
   "workspaces": [
