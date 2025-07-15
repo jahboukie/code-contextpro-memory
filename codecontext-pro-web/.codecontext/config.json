@@ -1,0 +1,23 @@
+{
+  "version": "0.2.0",
+  "mode": "memory-execution",
+  "projectId": "bfef1f9af07fb6e0",
+  "projectName": "codecontext-pro-web",
+  "createdAt": "2025-07-14T23:11:40.506Z",
+  "features": {
+    "memory": true,
+    "execution": true,
+    "intelligence": false
+  },
+  "executionEngine": {
+    "port": 3001,
+    "sandboxDir": "C:\\Users\\scorp\\projects\\vibe-extension\\code-context-pro\\codecontext-pro-web\\.codecontext\\sandbox",
+    "supportedLanguages": [
+      "javascript",
+      "typescript",
+      "python",
+      "go",
+      "rust"
+    ]
+  }
+}
