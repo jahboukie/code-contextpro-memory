@@ -2,34 +2,62 @@ rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read and write their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Allow authenticated users to read public data (if needed later)
-    match /public/{document=**} {
-      allow read: if request.auth != null;
-    }
-    
-    // Payments collection - users can read/write their own payment records
-    match /payments/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Subscriptions collection - users can read their own subscription data
-    match /subscriptions/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-    
-    // Analytics collection - allow writes for authenticated users
-    match /analytics/{document=**} {
-      allow write: if request.auth != null;
-    }
-    
-    // Default rule - deny all other access
+
+    // --- DEFAULT RULE: Deny all read/write access by default ---
+    // This is the most important rule. Everything is locked unless
+    // a more specific rule below allows access.
     match /{document=**} {
       allow read, write: if false;
+    }
+
+    // --- USERS COLLECTION ---
+    // Users should only be able to read and update their own document.
+    match /users/{userId} {
+      // A user can get their own data (e.g., to check subscription status).
+      allow get: if request.auth.uid == userId;
+
+      // A user can update their own document. You might want to restrict
+      // which fields they can update using request.resource.data.
+      allow update: if request.auth.uid == userId;
+
+      // Disallow anyone from listing all users or creating users from the client.
+      // User creation should be handled by your secure Firebase Function.
+      allow list, create, delete: if false;
+    }
+
+    // --- API KEYS COLLECTION ---
+    // This collection is FOR YOUR SERVER ONLY. The client should never
+    // be able to read or write here. Your Firebase Function will use the
+    // Admin SDK, which bypasses these rules, to validate keys.
+    match /apiKeys/{apiKey} {
+      allow read, write: if false;
+    }
+
+    // --- EXECUTIONS COLLECTION ---
+    // This collection tracks usage. The CLI (as an authenticated client)
+    // only needs permission to CREATE new execution documents.
+    match /executions/{userId}/{executionId} {
+      // Allow a user to create an execution record ONLY for themselves.
+      // This prevents User A from creating usage records for User B.
+      allow create: if request.auth.uid == userId;
+
+      // Disallow reading, listing, updating, or deleting from the client.
+      // This data is for your backend's internal tracking.
+      allow get, list, update, delete: if false;
+    }
+
+    // --- PAYMENTS COLLECTION ---
+    // Users can read their own payment records but not modify them
+    match /payments/{userId} {
+      allow get: if request.auth.uid == userId;
+      allow list, create, update, delete: if false;
+    }
+
+    // --- SUBSCRIPTIONS COLLECTION ---
+    // Users can read their own subscription data but not modify it
+    match /subscriptions/{userId} {
+      allow get: if request.auth.uid == userId;
+      allow list, create, update, delete: if false;
     }
   }
 }
